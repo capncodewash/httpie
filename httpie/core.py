@@ -41,6 +41,13 @@ def get_exit_status(http_status, follow=False):
     else:
         return ExitStatus.OK
 
+def get_exit_status_exact(http_status, expected_http_status):
+    """Translate HTTP status code to exit status code - exact mode, spefifying the expected status code."""
+    if  expected_http_status !== http_status :
+        return ExitStatus.ERROR_NOT_MATCHED
+    else:
+        return ExitStatus.OK
+
 
 def print_debug_info(env):
     sys.stderr.writelines([
@@ -96,6 +103,19 @@ def main(args=sys.argv[1:], env=Environment()):
             exit_status = get_exit_status(
                 http_status=response.status_code,
                 follow=args.follow
+            )
+
+            if not env.stdout_isatty and exit_status != ExitStatus.OK:
+                error('HTTP %s %s',
+                      response.raw.status,
+                      response.raw.reason,
+                      level='warning')
+
+        if args.check_status_exact:
+
+            exit_status = get_exit_status(
+                http_status=response.status_code,
+                follow=args.check_status_exact
             )
 
             if not env.stdout_isatty and exit_status != ExitStatus.OK:

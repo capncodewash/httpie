@@ -386,6 +386,27 @@ network.add_argument(
     ''')
 )
 
+network.add_argument(
+    '--check-status-exact',
+    type=int,
+    default=False,
+    metavar='CHECKSTATUSEXACT',
+    help=_('''
+        By default, HTTPie exits with 0 when no network or other fatal
+        errors occur.
+
+        This flag instructs HTTPie to also check the HTTP status code and
+        exit with an error if the status does not match the specified 
+        status code.
+
+        When the server replies with a status code which does not match 
+        the specified code, HTTPie exits with a status code of 1.
+
+        Also an error message is written to stderr if stdout is redirected.
+
+    ''')
+)
+
 
 ###############################################################################
 # Troubleshooting
